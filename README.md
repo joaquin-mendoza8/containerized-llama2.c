@@ -172,6 +172,71 @@ python sample.py --checkpoint=out15M/stories15M.pt
 
 Which gives the same results.
 
+## running on a kubernetes cluster
+
+With the use of Docker and Kubernetes, we can run the entire process above on a distributed kubernetes system. In my instance, I used the Kubernetes Cluster to run the model and write the output to a persistent volume claim (PVC) which I then copied from the running Kubernetes pod to my local machine. The commands in the YAML file are fully customizable to allow for varying configuration and output of the model.
+
+**\*NOTE\*** You must have access to a Kubernetes cluster to test this approach
+
+Follow these steps to run the model on your cluster.
+
+First, edit the environment variables in the build_img.sh file to build and push the Docker image to your Docker registry:
+
+```bash
+IMAGE_NAME="dockerUsername/exampleImageName" # change ONLY this line of code
+```
+
+Next, run the image builder script:
+
+```bash
+./build_img.sh
+```
+
+After you've ran the image script, edit the image name referred to by the YAML file:
+
+```bash
+spec:
+  containers:
+    - name: llama2-container
+      image: dockerUsername/exampleImageName:latest # change ONLY this line of code
+```
+
+Then, start a pod with the updated YAML file (make sure you are in your intended namespace): 
+
+```bash
+kubectl apply -f llama2.yaml
+```
+
+Check to see that the pod is created and starts running without error (^C to exit stream):
+
+```bash
+kubectl get pods --watch
+```
+
+Copy the output file from the PVC to your local machine:
+
+```bash
+kubectl cp llama2-pod:/mnt/output.log output.log
+```
+
+Read the output.log file in the root folder (llama2.c) to view the model's output data:
+
+```bash
+cat output.log
+```
+
+(Optional) Modify the model type or commands in the YAML file:
+
+```YAML
+value: "stories15M.bin" # change to any of the pretrained models used in the README.md
+```
+
+```YAML
+args: ["wget https://huggingface.co/karpathy/tinyllamas/resolve/main/$MODEL && make run && ./run $MODEL > /mnt/output.log 2>&1; sleep infinity"] # modify as needed
+```
+
+This process should run the necessary commands to run the pretrained model within a Kubernetes pod on a designated cluster, write the output data to a persistent volume claim (PVC), and allow us to copy that data to the local file *output.log* so we can view it.
+
 ## custom tokenizers
 
 In everything above, we've assumed the custom Lllama 2 tokenizer with 32,000 tokens. However, in many boutique LLMs, using vocabulary this big might be an overkill. If you have a small application you have in mind, you might be much better off training your own tokenizers. This can make everything nicer - with smaller vocabs your model has fewer parameters (because the token embedding table is a lot smaller), the inference is faster (because there are fewer tokens to predict), and your average sequence length per example could also get smaller (because the compression is a lot more efficient on your data). So let's see how we train a custom tokenizer.

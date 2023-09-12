@@ -21,9 +21,9 @@ spec:
       image: jmendoza9/llama2-app:latest
       env:
         - name: MODEL
-          value: "stories15M.bin"
+          value: "stories15M.bin" # change to any of the pretrained models used in the README.md
       command: ["/bin/sh", "-c"]
-      args: ["wget https://huggingface.co/karpathy/tinyllamas/resolve/main/$MODEL && make run && ./run $MODEL > /mnt/output.log 2>&1; sleep infinity"]
+      args: ["wget https://huggingface.co/karpathy/tinyllamas/resolve/main/$MODEL && make run && ./run $MODEL > /mnt/output.log 2>&1; sleep infinity"] # modify as needed
       volumeMounts:
         - name: output-volume
           mountPath: /mnt

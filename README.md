@@ -233,7 +233,7 @@ value: "stories15M.bin" # change to any of the pretrained models used in the REA
 args: ["wget https://huggingface.co/karpathy/tinyllamas/resolve/main/$MODEL && make run && ./run $MODEL > /mnt/output.log 2>&1; sleep infinity"] # modify as needed
 ```
 
-This process should run the necessary commands to run the pretrained model within a Kubernetes pod on a designated cluster, write the output data to a persistent volume claim (PVC), and allow us to copy that data to the local file *output.log* so we can view it.
+This process should successfully run the pretrained model within a Kubernetes pod on a designated cluster, write the output data to a persistent volume claim (PVC), and allow us to copy that data to the local file *output.log* so we can view it.
 
 ## custom tokenizers
 

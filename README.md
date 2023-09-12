@@ -176,9 +176,7 @@ Which gives the same results.
 
 With the use of Docker and Kubernetes, we can run the entire process above on a distributed kubernetes system. In my instance, I used the Kubernetes Cluster to run the model and write the output to a persistent volume claim (PVC) which I then copied from the running Kubernetes pod to my local machine. The commands in the YAML file are fully customizable to allow for varying configuration and output of the model.
 
-**\*NOTE\*** You must have access to a Kubernetes cluster to test this approach
-
-Follow these steps to run the model on your cluster.
+**\*NOTE\*** You must have access to a Kubernetes cluster to test this approach.
 
 First, edit the environment variables in the build_img.sh file to build and push the Docker image to your Docker registry:
 
@@ -192,7 +190,7 @@ Next, run the image builder script:
 ./build_img.sh
 ```
 
-After you've ran the image script, edit the image name referred to by the YAML file:
+Edit the image name referred to by the YAML file:
 
 ```bash
 spec:
@@ -201,7 +199,7 @@ spec:
       image: dockerUsername/exampleImageName:latest # change ONLY this line of code
 ```
 
-Then, start a pod with the updated YAML file (make sure you are in your intended namespace): 
+Start a pod with the updated YAML file (make sure you are in your intended namespace): 
 
 ```bash
 kubectl apply -f llama2.yaml

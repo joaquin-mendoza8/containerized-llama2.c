@@ -223,6 +223,12 @@ Read the output.log file in the root folder (llama2.c) to view the model's outpu
 cat output.log
 ```
 
+Remember to delete the pod when you've finished working with it:
+
+```bash
+kubectl delete pod llama2-pod
+```
+
 (Optional) Modify the model type or commands in the YAML file:
 
 ```YAML

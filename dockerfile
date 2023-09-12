@@ -12,5 +12,3 @@ WORKDIR /app/llama2.c
 
 # Run as a long-lived container
 CMD ["tail", "-f", "/dev/null"]
-
-    

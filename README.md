@@ -193,10 +193,7 @@ Next, run the image builder script:
 Edit the image name referred to by the YAML file:
 
 ```bash
-spec:
-  containers:
-    - name: llama2-container
-      image: dockerUsername/exampleImageName:latest # change ONLY this line of code
+image: dockerUsername/exampleImageName:latest # change ONLY this line of code
 ```
 
 Start a pod with the updated YAML file (make sure you are in your intended namespace): 
